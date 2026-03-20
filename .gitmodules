@@ -1,0 +1,3 @@
+[submodule "services/n8n"]
+	path = services/n8n
+	url = https://github.com/lucianodlf/n8n-shbase
