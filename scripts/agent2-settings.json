@@ -1,0 +1,14 @@
+{
+  "sandbox": {
+    "network": {
+      "allowedDomains": [
+        "api.anthropic.com",
+        "sheets.googleapis.com",
+        "oauth2.googleapis.com",
+        "accounts.google.com",
+        "registry.npmjs.org",
+        "*.npmjs.org"
+      ]
+    }
+  }
+}

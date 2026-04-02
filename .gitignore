@@ -1,5 +1,8 @@
 .env
-services/n8n/.agents/  
-
+services/n8n/.agents/
+.agents/
 # .mcp.json contiene credenciales reales — generado por init.sh desde .mcp.json.example
 .mcp.json
+.secrets
+*.pdf
+logs/

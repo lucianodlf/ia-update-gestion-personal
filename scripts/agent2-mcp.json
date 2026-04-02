@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-gsheets": {
+      "command": "npx",
+      "args": ["-y", "mcp-gsheets@latest"],
+      "env": {
+        "GOOGLE_PROJECT_ID": "claude-gastos-personal",
+        "GOOGLE_APPLICATION_CREDENTIALS": "/home/rafiki/Projects/ia-update-cuentas-personales/.secrets/claude-gastos-personal-bdfe5f7926c7.json"
+      }
+    }
+  }
+}
