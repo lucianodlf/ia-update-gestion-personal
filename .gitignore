@@ -6,3 +6,4 @@ services/n8n/.agents/
 .secrets
 *.pdf
 logs/
+settings.local.json
