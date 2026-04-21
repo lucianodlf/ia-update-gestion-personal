@@ -205,6 +205,8 @@ El resultado se guarda en `samples/extracted/<nombre>.json` y se imprime en stdo
 
 ### Agente 2 — Escritura en sheet (`scripts/agent2.sh`)
 
+> **Nota de diseño:** el Agente 2 usa **Claude Code CLI** (`claude`) como runtime en lugar de llamar directamente a la Anthropic API. Es una decisión deliberadamente experimental: Claude Code CLI tiene soporte nativo de MCP servers, lo que permite al agente usar herramientas como `mcp-gsheets` sin escribir código de tool-use desde cero. La alternativa convencional sería un script Python con el SDK de Anthropic, tool use manual y un cliente de Google Sheets API — funcional pero más verboso. Este enfoque cambia "escribir infraestructura de agente" por "escribir un system prompt + configurar MCP", y es parte de la exploración de hasta dónde se puede llegar con esa estrategia.
+
 Wrapper bash que invoca Claude Code CLI con system prompt, MCP server de Google Sheets y modo sin persistencia de sesión. El log se escribe en tiempo real.
 
 Flujo interno (definido en `scripts/agent2-system-prompt-latest.txt`):
