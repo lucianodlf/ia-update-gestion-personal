@@ -1,8 +1,24 @@
 # ia-update-cuentas-personales
 
+> **⚠️ Proyecto en construcción** — en uso activo y evolución continua. La estructura, prompts y configuración pueden cambiar entre iteraciones.
+
 Automatización de gastos personales: el usuario envía un comprobante (imagen/PDF) o un mensaje de texto por Telegram, y el sistema extrae los datos, los clasifica y actualiza una planilla Google Sheets — sin intervención manual.
 
-> Capturas de pantalla y video demo: _próximamente_
+**Proyecto de uso personal**, adaptado a un formato de planilla específico documentado en `docs/sheet-structure.md`. Usar como referencia o punto de partida requiere adaptar esa estructura y el system prompt del Agente 2 a la propia planilla.
+
+También es un espacio de aprendizaje y exploración de las tecnologías involucradas: una excusa para satisfacer la curiosidad y experimentar estrategias de construcción creativa en conjunto con IA.
+
+---
+
+## Vista previa
+
+### Planilla de gastos (Google Sheets)
+
+![Google Sheet de gastos](assets/Screenshot-google-sheet.png)
+
+### Workflow en n8n
+
+![Workflow n8n](assets/Screenshot-workflow-n8n.png)
 
 ---
 
