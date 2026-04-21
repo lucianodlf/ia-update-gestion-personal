@@ -1,0 +1,915 @@
+{
+  "updatedAt": "2026-04-21T19:49:32.449Z",
+  "createdAt": "2026-04-15T15:53:45.393Z",
+  "id": "hNiXAx9k73vV46wt",
+  "name": "Fase-3b v2: Telegram Nativo + Typing Indicator → Mistral OCR",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "tg-trig-v2",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        208
+      ],
+      "webhookId": "f1e2d3c4-b5a6-7890-cdef-123456789abc",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const msg = $input.first().json.message;\n\nif (!msg) {\n  return [{ json: { tipo: 'desconocido', chat_id: '', error: 'No hay mensaje' } }];\n}\n\nconst base = {\n  chat_id: String(msg.chat.id),\n  user: msg.from?.first_name || ''\n};\n\nif (msg.photo && msg.photo.length > 0) {\n  const foto = msg.photo[msg.photo.length - 1];\n  return [{ json: { ...base, tipo: 'foto', file_id: foto.file_id, caption: msg.caption || '' } }];\n}\n\nif (msg.document) {\n  return [{ json: { ...base, tipo: 'documento', file_id: msg.document.file_id, file_name: msg.document.file_name || 'archivo', mime_type: msg.document.mime_type || 'application/octet-stream', caption: msg.document.caption || '' } }];\n}\n\nif (msg.text && !msg.text.startsWith('/') && msg.text.length <= 50) {\n  return [{ json: { ...base, tipo: 'texto', texto: msg.text } }];\n}\n\nreturn [{ json: { ...base, tipo: 'desconocido', texto: msg.text || '' } }];"
+      },
+      "id": "norm-msg-v2",
+      "name": "Normalizar Mensaje",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-foto",
+              "leftValue": "={{ $json.tipo }}",
+              "rightValue": "foto",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "cond-doc",
+              "leftValue": "={{ $json.tipo }}",
+              "rightValue": "documento",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "detect-tipo-v2",
+      "name": "Detectar Tipo",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-texto",
+              "leftValue": "={{ $json.tipo }}",
+              "rightValue": "texto",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "es-texto",
+      "name": "Es Texto",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $json.chat_id }}",
+        "action": "upload_document"
+      },
+      "id": "ind-proceso",
+      "name": "Indicador de proceso",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        -80
+      ],
+      "webhookId": "0fbb0c10-a6b0-4c92-bd4c-a06027a36ea8",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Normalizar Mensaje').first().json.chat_id }}",
+        "text": "⏳ Descargando archivo...",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_notification": true
+        }
+      },
+      "id": "msg-descargando",
+      "name": "Msg Descargando",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        784,
+        -80
+      ],
+      "webhookId": "aabb1234-5678-9012-3456-aabbccddeeff",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Normalizar Mensaje').first().json.file_id }}",
+        "additionalFields": {}
+      },
+      "id": "tg-get-file",
+      "name": "Descargar Archivo",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        976,
+        -80
+      ],
+      "webhookId": "8f7dfc3a-75a6-4386-9c24-7389de3b61b0",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const binaryKeys = Object.keys($input.item.binary || {});\nconst binaryKey = binaryKeys[0] || 'data';\nconst bin = $input.item.binary?.[binaryKey];\n\nif (!bin) {\n  return [{ json: { error: 'No hay datos binarios', keys_encontradas: binaryKeys } }];\n}\n\nconst binaryBuffer = await this.helpers.getBinaryDataBuffer(0, binaryKey);\nconst base64 = binaryBuffer.toString('base64');\n\nconst prevData = $('Normalizar Mensaje').first().json;\n\nlet mimeType = bin.mimeType || 'application/octet-stream';\nif (mimeType === 'application/octet-stream') {\n  mimeType = prevData.tipo === 'foto' ? 'image/jpeg' : 'application/pdf';\n}\n\nreturn [{\n  json: {\n    tipo: prevData.tipo,\n    chat_id: prevData.chat_id,\n    file_id: prevData.file_id,\n    caption: prevData.caption || '',\n    mime_type: mimeType,\n    file_name: bin.fileName || 'archivo',\n    size_bytes: binaryBuffer.length,\n    base64: base64\n  }\n}];"
+      },
+      "id": "a-base64-v2",
+      "name": "A Base64",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.item.json;\nconst mimeType = data.mime_type || 'application/pdf';\nconst base64 = data.base64;\nconst isImage = mimeType.startsWith('image/');\nconst docType = isImage ? 'image_url' : 'document_url';\nconst doc = { type: docType, [docType]: 'data:' + mimeType + ';base64,' + base64 };\n\nconst fs = require('fs');\nconst classification = JSON.parse(fs.readFileSync('/data/classification.json', 'utf8'));\n\nfunction buildGuide(cls) {\n  const lines = [\n    'GUIA DE CLASIFICACION — completa \"detalle_inferido\" con la clave exacta si encontras coincidencia:',\n    ''\n  ];\n  for (const section of ['lista_fijos', 'lista_variables']) {\n    for (const [key, item] of Object.entries(cls[section] || {})) {\n      if (item.keys && item.keys.length) {\n        lines.push('- Si encontras: ' + item.keys.join(', ') + ' -> detalle_inferido: \"' + key + '\"');\n      }\n    }\n  }\n  lines.push('- Si no encontras ninguna coincidencia -> detalle_inferido: \"\"');\n  return lines.join('\\n');\n}\n\nconst guide = buildGuide(classification);\n\nconst prompt = [\n  'Sos un extractor de datos de comprobantes de pago argentinos. Extrae exactamente los cinco campos indicados.',\n  '',\n  'ESTRATEGIA: Escanea TODO el texto del documento antes de completar cada campo. Los datos pueden estar en cualquier parte: encabezado, cuerpo, pie, tablas, sellos.',\n  '',\n  'concepto - Nombre del servicio, impuesto o destinatario identificado.',\n  '  * Prioriza el nombre especifico del emisor o servicio, no el concepto generico del banco.',\n  '  * Si el banco dice \"VAR\" o \"Pago de servicio\" pero hay nombre de empresa -> usa el nombre de empresa.',\n  '  * Si es una transferencia a persona -> usa el nombre del destinatario.',\n  '  * Ejemplos: \"MONOTRIBUTO\", \"Epe - Santa Fe\", \"Damian Raul Frontera\".',\n  '',\n  'detalle_inferido - Clave de clasificacion del gasto (ver GUIA mas abajo).',\n  '  * Escanea TODOS los campos del documento: nombre de empresa, destinatario, CBU, CUIT, numero de cuenta.',\n  '  * Comparacion flexible: ignora mayusculas, minusculas, acentos, tildes y puntuacion.',\n  '    Ej: \"Monica\" = \"Monica\" | \"dietetica\" = \"Dietetica\" | \"epe santa fe\" = \"Epe - Santa Fe\"',\n  '  * Si encontras coincidencia -> completa con la clave exacta indicada en la GUIA. Sin modificar.',\n  '  * Si no hay coincidencia en ninguna parte del documento -> deja vacio \"\".',\n  '',\n  'fecha - Fecha del pago o emision.',\n  '  * Formato de salida: DD/MM/YYYY. Ignorar hora, zona horaria y segundos.',\n  '  * Si hay varias fechas -> usar la de pago o acreditacion, no la de vencimiento.',\n  '  * Excepción ARCA / IIBB: si el documento incluye una etiqueta \"Fecha y Hora\" → usar ESA fecha. Ignorar \"FECHA DE PAGO\" que puede corresponder a la fecha de procesamiento bancario posterior.',\n  '',\n  'importe - Monto total pagado como numero.',\n  '  * Sin simbolo de moneda ni separadores de miles. Punto decimal si aplica.',\n  '  * Ejemplos: \"$72.414,30\" -> 72414.3 | \"$ 52.939,51\" -> 52939.51 | \"$33.000\" -> 33000',\n  '  * Si hay subtotal + IVA + total -> usar el TOTAL.',\n  '  * Si no se encuentra -> 0.',\n  '',\n  'observacion - Datos de trazabilidad. Incluir en este orden si estan disponibles:',\n  '  1. Nombre del destinatario o empresa emisora',\n  '  2. CBU o alias',\n  '  3. CUIT / DNI / numero de cuenta',\n  '  4. Numero de comprobante, referencia o periodo',\n  '  * NO incluir: IDs de operacion alfanumericos largos (20+ caracteres), URLs, texto repetitivo.',\n  '',\n  guide\n].join('\\n');\n\nreturn [{\n  json: {\n    chat_id: data.chat_id,\n    tipo: data.tipo,\n    file_name: data.file_name || 'comprobante',\n    caption: data.caption || '',\n    body: {\n      model: 'mistral-ocr-latest',\n      document: doc,\n      document_annotation_format: {\n        type: 'json_schema',\n        json_schema: {\n          name: 'comprobante_pago',\n          schema: {\n            type: 'object',\n            properties: {\n              concepto: { type: 'string', description: 'Nombre del servicio, impuesto o destinatario. No usar genericos como VAR.' },\n              detalle_inferido: { type: 'string', description: 'Clave exacta de la guia de clasificacion que coincide. Vacio si no hay coincidencia.' },\n              fecha: { type: 'string', description: 'Fecha del pago en formato DD/MM/YYYY' },\n              importe: { type: 'number', description: 'Monto total pagado como numero sin simbolo ni separadores de miles' },\n              observacion: { type: 'string', description: 'Nombre de empresa/destinatario, CBU, CUIT/DNI, numero de comprobante. Sin hashes largos.' }\n            },\n            required: ['concepto', 'detalle_inferido', 'fecha', 'importe', 'observacion']\n          }\n        }\n      },\n      document_annotation_prompt: prompt,\n      include_image_base64: false\n    }\n  }\n}];"
+      },
+      "id": "preparar-ocr-v2",
+      "name": "Preparar OCR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $json.chat_id }}",
+        "action": "upload_document"
+      },
+      "id": "refrescar-ind",
+      "name": "Refrescar indicador",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1488,
+        -80
+      ],
+      "webhookId": "9fedef57-f408-42cb-9ee2-faddcda16c18",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Normalizar Mensaje').first().json.chat_id }}",
+        "text": "⏳ Procesando OCR...",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_notification": true
+        }
+      },
+      "id": "msg-ocr",
+      "name": "Msg OCR",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1664,
+        -80
+      ],
+      "webhookId": "bbcc2345-6789-0123-4567-bbccddeeff00",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/ocr",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{MISTRAL_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($('Preparar OCR').first().json.body) }}",
+        "options": {}
+      },
+      "id": "llamar-mistral-v2",
+      "name": "Llamar Mistral OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.item.json;\nconst preparar = $('Preparar OCR').first().json;\nconst chatId = preparar.chat_id;\nconst caption = preparar.caption || '';\n\nif (!response.document_annotation) {\n  return [{ json: { chat_id: chatId, caption, mensaje: '❌ Sin respuesta de OCR', datos_ocr: null } }];\n}\n\nlet datos;\ntry {\n  datos = typeof response.document_annotation === 'string'\n    ? JSON.parse(response.document_annotation)\n    : response.document_annotation;\n} catch(e) {\n  return [{ json: { chat_id: chatId, caption, mensaje: `❌ Error parseando OCR: ${e.message}`, datos_ocr: null } }];\n}\n\nconst resultado = { ...datos };\nif (caption) resultado.caption = caption;\n\nreturn [{ json: {\n  chat_id: chatId,\n  datos_ocr: resultado,\n  mensaje: JSON.stringify(resultado, null, 2)\n} }];"
+      },
+      "id": "parsear-json-v2",
+      "name": "Parsear JSON OCR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.mensaje }}",
+        "additionalFields": {}
+      },
+      "id": "tg-send-ocr",
+      "name": "Responder con OCR",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2192,
+        80
+      ],
+      "webhookId": "a5bbb064-4193-4748-9741-ee6fb82f33aa",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const parsed = $input.item.json;\nconst chatId = parsed.chat_id;\nconst datos = parsed.datos_ocr;\n\nconst jsonStr = JSON.stringify(datos || { error: 'OCR no pudo extraer datos del comprobante' });\nconst shellSafe = jsonStr.replace(/'/g, \"'\\\\''\")\nconst scriptPath = '/home/rafiki/Projects/ia-update-cuentas-personales/scripts/agent2.sh';\nconst cmd = 'TELEGRAM_CHAT_ID=' + chatId + ' ' + scriptPath + \" '\" + shellSafe + \"'\";\n\nreturn [{ json: { chat_id: chatId, agent_cmd: cmd } }];"
+      },
+      "id": "prep-input-a2-ocr",
+      "name": "Preparar Input Agente 2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $('Preparar Input Agente 2').first().json.chat_id }}"
+      },
+      "id": "ind-agente-ocr",
+      "name": "Ind Agente OCR",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2384,
+        -80
+      ],
+      "webhookId": "ccdd3456-7890-1234-5678-ccddeeff0011",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "command": "={{ $('Preparar Input Agente 2').first().json.agent_cmd }}",
+        "cwd": "/home/rafiki"
+      },
+      "id": "agente2-ocr",
+      "name": "Ejecutar Agente 2 (OCR)",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        2528,
+        -80
+      ],
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "9QGObWJpGpDqZDPw",
+          "name": "SSH host local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Parsear JSON OCR').first().json.chat_id }}",
+        "text": "={{ $json.stdout || $json.stderr || 'Sin respuesta del agente' }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "tg-resp-agente-ocr",
+      "name": "Responder con Agente (OCR)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2704,
+        -80
+      ],
+      "webhookId": "63ff1e10-78b0-4de3-ab26-a00c1b33a709",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $json.chat_id }}"
+      },
+      "id": "ind-typing",
+      "name": "Indicador escribiendo",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        944,
+        192
+      ],
+      "webhookId": "0606aabf-fe7e-4376-baca-7e3bbd5ee00d",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const prevData = $('Normalizar Mensaje').first().json;\nconst text = prevData.texto || '';\nconst escaped = text.replace(/\\$/g, '\\\\$').replace(/`/g, '\\\\`');\nreturn [{ json: { ...prevData, escaped_text: escaped } }];"
+      },
+      "id": "escapar-texto-v2",
+      "name": "Escapar Texto",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.item.json;\nconst texto = data.texto || '';\n\nfunction isGarbage(word) {\n  const letters = word.toLowerCase().replace(/[^a-záéíóúñ]/gi, '');\n  if (letters.length < 3) return true;\n  const freq = {};\n  for (const c of letters) freq[c] = (freq[c] || 0) + 1;\n  const maxFreq = Math.max(...Object.values(freq));\n  return maxFreq / letters.length > 0.7;\n}\n\nconst words = texto.trim().split(/\\s+/);\nconst hasNumber = /\\d/.test(texto);\nconst hasRealWord = words.some(w => !isGarbage(w));\nconst valid = hasNumber || hasRealWord;\n\nconst errorMsg = valid ? '' : '❓ No entendí ese mensaje.\\n\\nPodés enviar:\\n• Texto: \"Monotributo $74500\", \"Gas listo\", \"IIBB 36700\"\\n• Foto o PDF de un comprobante de pago';\n\nreturn [{ json: { ...data, valid, error_msg: errorMsg } }];"
+      },
+      "id": "validar-input-texto",
+      "name": "Validar Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "cond-valid",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-input-valido",
+      "name": "IF Válido",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1536,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $('Normalizar Mensaje').first().json.chat_id }}"
+      },
+      "id": "ind-agente-texto",
+      "name": "Ind Agente Texto",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1808,
+        272
+      ],
+      "webhookId": "ddee4567-8901-2345-6789-ddeeff001122",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "command": "={{ 'TELEGRAM_CHAT_ID=' + $('Escapar Texto').first().json.chat_id + ' /home/rafiki/Projects/ia-update-cuentas-personales/scripts/agent2.sh \"' + $('Escapar Texto').first().json.escaped_text + '\"' }}",
+        "cwd": "/home/rafiki"
+      },
+      "id": "agente2-v2",
+      "name": "Ejecutar Agente 2",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        272
+      ],
+      "credentials": {
+        "sshPrivateKey": {
+          "id": "9QGObWJpGpDqZDPw",
+          "name": "SSH host local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Normalizar Mensaje').first().json.chat_id }}",
+        "text": "={{ $json.stdout || $json.stderr || 'Sin respuesta del agente' }}",
+        "additionalFields": {}
+      },
+      "id": "tg-resp-agente",
+      "name": "Responder con Agente",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2192,
+        272
+      ],
+      "webhookId": "0cb85ad4-2075-4fe8-b729-611823b04d84",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Normalizar Mensaje').first().json.chat_id }}",
+        "text": "={{ $json.error_msg }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "tg-resp-error-input",
+      "name": "Responder Error Input",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1808,
+        512
+      ],
+      "webhookId": "ee6a8335-e842-42f4-b4fb-30c4a67dacfa",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "=\"Formato desconocido....\"",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "67764eaf-3b4c-4a8c-94a8-5bf137eabbe1",
+      "name": "Responder Input Desconocido",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        736,
+        448
+      ],
+      "webhookId": "ee6a8335-e842-42f4-b4fb-30c4a67dacfa",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalizar Mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar Mensaje": {
+      "main": [
+        [
+          {
+            "node": "Detectar Tipo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detectar Tipo": {
+      "main": [
+        [
+          {
+            "node": "Indicador de proceso",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Es Texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Es Texto": {
+      "main": [
+        [
+          {
+            "node": "Indicador escribiendo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder Input Desconocido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Indicador de proceso": {
+      "main": [
+        [
+          {
+            "node": "Msg Descargando",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Msg Descargando": {
+      "main": [
+        [
+          {
+            "node": "Descargar Archivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar Archivo": {
+      "main": [
+        [
+          {
+            "node": "A Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A Base64": {
+      "main": [
+        [
+          {
+            "node": "Preparar OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar OCR": {
+      "main": [
+        [
+          {
+            "node": "Refrescar indicador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refrescar indicador": {
+      "main": [
+        [
+          {
+            "node": "Msg OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Msg OCR": {
+      "main": [
+        [
+          {
+            "node": "Llamar Mistral OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Llamar Mistral OCR": {
+      "main": [
+        [
+          {
+            "node": "Parsear JSON OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parsear JSON OCR": {
+      "main": [
+        [
+          {
+            "node": "Responder con OCR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Preparar Input Agente 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Input Agente 2": {
+      "main": [
+        [
+          {
+            "node": "Ind Agente OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ind Agente OCR": {
+      "main": [
+        [
+          {
+            "node": "Ejecutar Agente 2 (OCR)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ejecutar Agente 2 (OCR)": {
+      "main": [
+        [
+          {
+            "node": "Responder con Agente (OCR)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Indicador escribiendo": {
+      "main": [
+        [
+          {
+            "node": "Escapar Texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escapar Texto": {
+      "main": [
+        [
+          {
+            "node": "Validar Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Input": {
+      "main": [
+        [
+          {
+            "node": "IF Válido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Válido": {
+      "main": [
+        [
+          {
+            "node": "Ind Agente Texto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder Error Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ind Agente Texto": {
+      "main": [
+        [
+          {
+            "node": "Ejecutar Agente 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ejecutar Agente 2": {
+      "main": [
+        [
+          {
+            "node": "Responder con Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Buenos_Aires",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "binaryMode": "separate",
+    "errorWorkflow": "25r84vaE8TbWxyDu",
+    "timeSavedMode": "fixed",
+    "executionTimeout": 180,
+    "timeSavedPerExecution": 5
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "9fb2022a-a6cb-4b92-b182-8d51fd12b0ed",
+  "activeVersionId": null,
+  "versionCounter": 116,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-04-15T15:53:45.393Z",
+      "createdAt": "2026-04-15T15:53:45.393Z",
+      "role": "workflow:owner",
+      "workflowId": "hNiXAx9k73vV46wt",
+      "projectId": "4dwZcEefxhzc3x79",
+      "project": {
+        "updatedAt": "2026-03-20T23:36:03.455Z",
+        "createdAt": "2026-03-20T23:35:49.275Z",
+        "id": "4dwZcEefxhzc3x79",
+        "name": "Luciano Delfino <luciano.dlf@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "77e17b8c-4d76-438e-b0f7-fc117d3068b5"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}

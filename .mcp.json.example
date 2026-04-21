@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "mcp-gsheets": {
+      "command": "npx",
+      "args": ["-y", "mcp-gsheets@latest"],
+      "env": {
+        "GOOGLE_PROJECT_ID": "{{GOOGLE_PROJECT_ID}}",
+        "GOOGLE_APPLICATION_CREDENTIALS": "/ruta/absoluta/al/service-account-key.json"
+      }
+    },
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "http://localhost:5678",
+        "N8N_API_KEY": "{{N8N_API_KEY}}"
+      }
+    }
+  }
+}

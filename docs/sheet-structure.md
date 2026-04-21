@@ -1,6 +1,6 @@
 # Sheet Structure — Finanzas Generales
 
-> Sheet ID: `1tcj7kkWHhmZyNaWw48UB_Qkh-mF5zt4v2UW-UsDyv7c`
+> Sheet ID: configurado en `AGENT2_SHEET_ID` (.env)
 > Locale: `es_AR` | Timezone: `America/Buenos_Aires`
 > Relevado: 2026-03-21
 
@@ -32,10 +32,10 @@
 | B | Mes | ❌ NO escribir | Fórmula automática desde Fecha |
 | C | Tipo | ✅ Escribir | `Fijo` o `Variable` |
 | D | Concepto | ✅ Escribir | Ver lista en sección 4 |
-| E | Importe | ✅ Escribir | Número. Ver patrones de importe abajo |
-| F | Total | ✅ condicional | Solo en Patrón 2 y 3. Vacío en Patrón 1 |
+| E | Importe | ❌ No escribir (fórmula) | Fórmula que deriva de col F. Nunca modificar. |
+| F | Total | ✅ Escribir | Importe base que escribe el Agente 2. E lo calcula automáticamente. |
 | G | Detalle | ✅ Escribir | Texto libre descriptivo |
-| H | Observación | ✅ condicional | Solo en Patrón 2 y 3. Vacío en Patrón 1 |
+| H | Observación | ✅ condicional | Solo si está vacía. Si ya tiene datos → el Agente nunca la modifica. |
 | I | Estado | ✅ Escribir | `ok` o `P` |
 | J | — | ❌ NO tocar | Separador visual |
 | K | Mes resumen | ❌ NO tocar | Tabla "Total / Mes" |
@@ -44,16 +44,16 @@
 ### Patrones de Importe
 
 **Patrón 1 — Valor directo** (default):
-- E: número directo | F: vacío | H: vacío
+- F: importe total (escribe el Agente) | E: fórmula `=F{row}` | H: vacío
 - Ejemplo: Alquiler $340.000, Monotributo $63.358
 
 **Patrón 2 — División** (gasto compartido):
-- E: `=F{row}/N` | F: total de factura | H: `"Divido N"`
+- F: total de factura (escribe el Agente) | E: `=F{row}/N` | H: `"Divido N"`
 - Detalle: `"<== Mitad | Total ==>"`
 - Ejemplo: Gas total $15.365 → E = $7.683 (dividido 2)
 
 **Patrón 3 — Por unidad** (gasto variable por cantidad):
-- E: `=F{row}*N` | F: valor por unidad | H: `"Sesiones al mes: N"`
+- F: valor por unidad (escribe el Agente) | E: `=F{row}*N` | H: `"Sesiones al mes: N"`
 - Detalle: `"<== Valor x Secion"`
 - Ejemplo: Terapia $45.000/sesión × N sesiones
 
@@ -84,7 +84,7 @@ El conjunto de registros fijos del inicio de mes (template) es:
 | Varios | Tarjeta MP | Variable | Patrón 1 | ok |
 | Varios | Obra Social | Fijo | Patrón 1 | P |
 
-> Nota: Gas, Agua, Luz, Internet/Celular, Alquiler — el usuario ajusta el Total (col F) manualmente cuando llega la factura. El Agente 2 no necesita conocer ese valor de antemano; solo actualiza estado e importe cuando se lo indica.
+> Nota: Gas, Agua, Luz, Internet/Celular, Alquiler — el usuario ajusta columna importe con formula (col E) manualmente cuando llega la factura. El Agente 2 no necesita conocer ese valor de antemano; solo actualiza estado e importe cuando se lo indica.
 
 ### Fase-int-01 — Monot+Impuestos (primera automatización)
 
@@ -104,8 +104,8 @@ El conjunto de registros fijos del inicio de mes (template) es:
 3. **Si no existe:** insertar fila nueva completa con todos los campos
 4. **Si ya existe (caso más frecuente):**
    - Actualizar col A (Fecha) con la fecha del mensaje/comprobante
-   - Verificar col E (Importe): si el mensaje/comprobante indica un importe → actualizarlo; si no → dejar el existente
-   - Col H (Observación): NO modificar
+   - Verificar col F (Total/Importe): si el mensaje/comprobante indica un importe → actualizarlo; si no → dejar el existente
+   - Col H (Observación): solo escribir si está vacía; si ya tiene datos → nunca modificar
    - Actualizar col I (Estado): cambiar `P` → `ok`
 
 **Términos equivalentes reconocidos (aprendizaje incremental):**

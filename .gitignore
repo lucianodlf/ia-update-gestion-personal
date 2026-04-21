@@ -3,7 +3,24 @@ services/n8n/.agents/
 .agents/
 # .mcp.json contiene credenciales reales — generado por init.sh desde .mcp.json.example
 .mcp.json
-.secrets
+.secrets/*
+!.secrets/.gitkeep
 *.pdf
-logs/
+logs/*
+!logs/.gitkeep
+
+# Agent2 — MCP config con ruta a credenciales (generado por make init)
+scripts/agent2-mcp.json
+# Versiones anteriores del system prompt (solo se conserva la última)
+scripts/agent2-system-prompt-v*.txt
+!scripts/agent2-system-prompt-latest.txt
+
+# Comprobantes de prueba — solo se conservan 2 muestras representativas
+samples/receipts/
+!samples/receipts/20260417-CompraSuper.jpg
+!samples/receipts/20260417-PagoObraSocial.jpeg
+# JSONs extraídos por OCR (outputs generados, no fuente)
+samples/extracted/
+
 settings.local.json
+skills-lock.json

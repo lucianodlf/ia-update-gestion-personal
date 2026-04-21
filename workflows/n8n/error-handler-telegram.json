@@ -1,0 +1,200 @@
+{
+  "updatedAt": "2026-04-20T22:20:05.871Z",
+  "createdAt": "2026-04-20T21:58:36.997Z",
+  "id": "25r84vaE8TbWxyDu",
+  "name": "Error Handler — Notificación Telegram",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "chatId": "{{TELEGRAM_CHAT_ID}}",
+        "text": "={{ '❌ Error en workflow: *' + $json.workflow.name + '*\\n\\nNodo: `' + ($json.execution.lastNodeExecuted ?? 'desconocido') + '`\\nError: ' + '\\n' +\n  $json.execution.error.stack + '\\n' +\n$json.execution.error.message }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "tg-error-notify",
+      "name": "Notificar Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        304
+      ],
+      "webhookId": "1bf6dd93-160f-4e1f-992b-86e2092a335f",
+      "credentials": {
+        "telegramApi": {
+          "id": "TAAWjROucN89XC0y",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Notificar Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Buenos_Aires",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "saveExecutionProgress": true,
+    "timeSavedPerExecution": 5
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+  "activeVersionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+  "versionCounter": 35,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-04-20T21:58:36.997Z",
+      "createdAt": "2026-04-20T21:58:36.997Z",
+      "role": "workflow:owner",
+      "workflowId": "25r84vaE8TbWxyDu",
+      "projectId": "4dwZcEefxhzc3x79",
+      "project": {
+        "updatedAt": "2026-03-20T23:36:03.455Z",
+        "createdAt": "2026-03-20T23:35:49.275Z",
+        "id": "4dwZcEefxhzc3x79",
+        "name": "Luciano Delfino <luciano.dlf@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "77e17b8c-4d76-438e-b0f7-fc117d3068b5"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2026-04-20T22:20:05.872Z",
+    "createdAt": "2026-04-20T22:20:05.872Z",
+    "versionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+    "workflowId": "25r84vaE8TbWxyDu",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "error-trigger",
+        "name": "Error Trigger",
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          240,
+          304
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "chatId": "{{TELEGRAM_CHAT_ID}}",
+          "text": "={{ '❌ Error en workflow: *' + $json.workflow.name + '*\\n\\nNodo: `' + ($json.execution.lastNodeExecuted ?? 'desconocido') + '`\\nError: ' + '\\n' +\n  $json.execution.error.stack + '\\n' +\n$json.execution.error.message }}",
+          "additionalFields": {
+            "parse_mode": "Markdown"
+          }
+        },
+        "id": "tg-error-notify",
+        "name": "Notificar Error",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          480,
+          304
+        ],
+        "webhookId": "1bf6dd93-160f-4e1f-992b-86e2092a335f",
+        "credentials": {
+          "telegramApi": {
+            "id": "TAAWjROucN89XC0y",
+            "name": "Telegram Bot"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Notificar Error",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Luciano Delfino",
+    "name": null,
+    "description": null,
+    "autosaved": true,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-04-21T15:32:14.415Z",
+        "id": 55,
+        "workflowId": "25r84vaE8TbWxyDu",
+        "versionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+        "event": "activated",
+        "userId": "77e17b8c-4d76-438e-b0f7-fc117d3068b5"
+      },
+      {
+        "createdAt": "2026-04-21T15:33:04.552Z",
+        "id": 57,
+        "workflowId": "25r84vaE8TbWxyDu",
+        "versionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+        "event": "deactivated",
+        "userId": "77e17b8c-4d76-438e-b0f7-fc117d3068b5"
+      },
+      {
+        "createdAt": "2026-04-21T15:33:14.455Z",
+        "id": 59,
+        "workflowId": "25r84vaE8TbWxyDu",
+        "versionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+        "event": "activated",
+        "userId": "77e17b8c-4d76-438e-b0f7-fc117d3068b5"
+      },
+      {
+        "createdAt": "2026-04-21T15:40:54.838Z",
+        "id": 61,
+        "workflowId": "25r84vaE8TbWxyDu",
+        "versionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+        "event": "deactivated",
+        "userId": "77e17b8c-4d76-438e-b0f7-fc117d3068b5"
+      },
+      {
+        "createdAt": "2026-04-21T15:41:22.850Z",
+        "id": 63,
+        "workflowId": "25r84vaE8TbWxyDu",
+        "versionId": "e3c617f3-7718-4f20-a942-fc10f799f52f",
+        "event": "activated",
+        "userId": "77e17b8c-4d76-438e-b0f7-fc117d3068b5"
+      }
+    ]
+  }
+}

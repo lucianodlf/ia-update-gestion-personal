@@ -1,0 +1,167 @@
+{
+  "_note": "Archivo de clasificación de gastos. Fuente única para AgenteOCR y Agente2. Keys: siempre minúsculas, sin duplicados por case/acento/puntuación. Orden: palabra más representativa primero, luego variantes, al final identificadores numéricos (CBU/CUIT/cuenta). detalle null = no modificar col G si fila existe. is_precargado false = insertar directo sin buscar fila existente.",
+  "lista_fijos": {
+    "Monotributo": {
+      "concepto": "Monot+Impuestos",
+      "detalle": "Monotributo",
+      "keys": ["monotributo", "monot"],
+      "is_precargado": true
+    },
+    "IB Mensual (Reg. Simp)": {
+      "concepto": "Monot+Impuestos",
+      "detalle": "IB Mensual (Reg. Simp)",
+      "keys": ["iibb", "ib", "A.P.I. Provincia de Santa Fe", "IIBB Santa Fe", "20332179749"],
+      "is_precargado": true
+    },
+    "Gas": {
+      "concepto": "Gas",
+      "detalle": null,
+      "keys": ["gas", "litoral gas", "99605684994"],
+      "is_precargado": true
+    },
+    "Agua": {
+      "concepto": "Agua",
+      "detalle": null,
+      "keys": ["agua", "aguas santafesinas", "12900371920006"],
+      "is_precargado": true
+    },
+    "Luz": {
+      "concepto": "Luz",
+      "detalle": null,
+      "keys": ["luz", "epe", "epe - santa fe", "285105179612"],
+      "is_precargado": true
+    },
+    "Internet/Celular": {
+      "concepto": "Internet/Celular",
+      "detalle": null,
+      "keys": ["internet", "celular", "claro", "cu1689383659"],
+      "is_precargado": true
+    },
+    "Alquiler": {
+      "concepto": "Alquiler",
+      "detalle": null,
+      "keys": ["alquiler"],
+      "is_precargado": true
+    },
+    "Terapia": {
+      "concepto": "Terapia",
+      "detalle": null,
+      "keys": ["terapia", "psicologa", "romina andrea giosa", "27-23186440-1"],
+      "is_precargado": true
+    },
+    "Obra Social": {
+      "concepto": "Varios",
+      "detalle": "Obra Social",
+      "keys": ["sancor", "asoc.mut.sancor"],
+      "is_precargado": true
+    },
+    "Telefono Meli": {
+      "concepto": "Varios",
+      "detalle": "Telefono Meli",
+      "keys": ["telefono meli", "cta meli"],
+      "is_precargado": true
+    },
+    "Meditacion": {
+      "concepto": "Varios",
+      "detalle": "Meditacion",
+      "keys": ["meditacion", "lucas gamarra", "lucas miguel angel gamarra", "0000003100036021533957"],
+      "is_precargado": true
+    },
+    "Taichi": {
+      "concepto": "Varios",
+      "detalle": "Taichi",
+      "keys": ["taichi","chi kung", "damian frontera", "damian raul frontera", "20295609053", "0000003100066672099007"],
+      "is_precargado": true
+    },
+    "Mariano Djembe": {
+      "concepto": "Varios",
+      "detalle": "Mariano Djembe",
+      "keys": ["djembe", "mariano djembe", "mariano"],
+      "is_precargado": true
+    },
+    "Gimnasio": {
+      "concepto": "Varios",
+      "detalle": "Gimnasio",
+      "keys": ["gimnasio"],
+      "is_precargado": true
+    },
+    "Psiquiatra": {
+      "concepto": "Hogar/Autocuidado",
+      "detalle": "Psiquiatra",
+      "keys": ["psiquiatra", "psi", "monica olea", "monica guadalupe olea", "27286586215", "0000003100054494534543"],
+      "is_precargado": true
+    },
+    "Tarjeta MP": {
+      "concepto": "Varios",
+      "detalle": "Tarjeta MP",
+      "keys": ["tarjeta mp", "mercado pago", "mp tarjeta"],
+      "is_precargado": true
+    },
+    "Tarjeta NX": {
+      "concepto": "Varios",
+      "detalle": "Tarjeta Nx",
+      "keys": ["tarjeta nx", "tarjeta naranja", "t nar", "pago digital-naranja x"],
+      "is_precargado": true
+    }
+  },
+  "lista_variables": {
+    "Dietetica": {
+      "concepto": "Dietetica",
+      "detalle": null,
+      "keys": ["dietetica", "maria emilia carballada", "0000003100051126196021", "196921"],
+      "is_precargado": false
+    },
+    "Super": {
+      "concepto": "Super",
+      "detalle": "Supermercado",
+      "keys": ["supermercado","super", "kilbel", "el túnel", "30519004557"],
+      "is_precargado": false
+    },
+    "Panaderia": {
+      "concepto": "Super",
+      "detalle": "Panaderia",
+      "keys": ["panaderia", "pin pan", "balear", "panad"],
+      "is_precargado": false
+    },
+    "Verduleria": {
+      "concepto": "Super",
+      "detalle": "Verduleria",
+      "keys": ["verdu", "verduleria", "cynthia marisol pilinco romero", "0000003100091433357913", "23399520894"],
+      "is_precargado": false
+    },
+    "Comida/Bebida": {
+      "concepto": "Comida/Bebida",
+      "detalle": null,
+      "keys": ["restaurant", "delivery", "café", "pizzería", "sushi"],
+      "is_precargado": false
+    },
+    "Alcohol": {
+      "concepto": "Alcohol",
+      "detalle": null,
+      "keys": ["alcohol", "bar", "cerveza", "vino", "fernet"],
+      "is_precargado": false
+    },
+    "Gustos/Salidas": {
+      "concepto": "Gustos/Salidas",
+      "detalle": null,
+      "keys": ["cine", "teatro", "salida", "entretenimiento", "espectáculo"],
+      "is_precargado": false
+    },
+    "Farmacia": {
+      "concepto": "Hogar/Autocuidado",
+      "detalle": "Farmacia",
+      "keys": ["Farmacia", "medicamento", "27-22215337-4", "COM: 16521276" ], "is_precargado": false },
+    "Hogar/Autocuidado": {
+      "concepto": "Hogar/Autocuidado",
+      "detalle": null,
+      "keys": ["hogar", "autocuidado" ],
+      "is_precargado": false
+    },
+    "LlinasyLLinas": {
+      "concepto": "Varios",
+      "detalle": "llinas y llinas",
+      "keys": ["linas y linas", "saumerios", "llinas y llinas", "20168802987"],
+      "is_precargado": false
+    }
+  }
+}
