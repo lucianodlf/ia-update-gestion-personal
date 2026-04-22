@@ -33,7 +33,7 @@ init: ## Genera scripts/agent2-mcp.json desde credenciales Google  [CREDENTIALS=
 
 start: ## Levanta el entorno completo  [ZROK=1] [ACTIVATE=1]
 	@$(MAKE) -C services/n8n up
-	@if [ "$(ZROK)" = "1" ]; then $(MAKE) -C services/n8n zrok2-start ZROK_NAME=$(ZROK_NAME) N8N_PORT=$(N8N_PORT); fi
+	@if [ "$(ZROK)" = "1" ]; then $(MAKE) -C services/n8n zrok2-start ZROK_NAME=$(ZROK_NAME); fi
 	@if [ "$(ACTIVATE)" = "1" ]; then $(MAKE) activate-workflows; fi
 
 stop: ## Detiene el entorno completo  [ZROK=1] [ACTIVATE=1]
