@@ -135,7 +135,7 @@ concepto — Nombre del comercio, servicio, impuesto o destinatario del pago.
   • Si el banco dice "VAR" o "Pago de servicio" pero hay nombre de empresa → usá el nombre de empresa.
   • Si es transferencia a persona → usá el nombre del destinatario.
   • Si hay etiqueta del usuario (ver arriba) y el documento no muestra comercio claro → usá la etiqueta.
-  • Ejemplos: "FARMACIA CANO", "MONOTRIBUTO", "Epe - Santa Fe", "Damian Raul Frontera".
+  • Ejemplos: "FARMACIA EJEMPLO", "MONOTRIBUTO", "Empresa Servicio SA", "Nombre Destinatario".
 
 detalle_inferido — Clave de clasificación del gasto (ver GUÍA más abajo).
   • Si hay etiqueta del usuario (ver arriba): buscá esa etiqueta primero en la GUÍA. Si coincide → usala directamente.

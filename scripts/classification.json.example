@@ -1,40 +1,40 @@
 {
   "_note": "Archivo de clasificación de gastos. Fuente única para AgenteOCR y Agente2. Keys: siempre minúsculas, sin duplicados por case/acento/puntuación. Orden: palabra más representativa primero, luego variantes, al final identificadores numéricos (CBU/CUIT/cuenta). detalle null = no modificar col G si fila existe. is_precargado false = insertar directo sin buscar fila existente.",
   "lista_fijos": {
-    "Monotributo": {
+    "Impuesto Nacional": {
       "concepto": "Monot+Impuestos",
-      "detalle": "Monotributo",
-      "keys": ["monotributo", "monot"],
+      "detalle": "Impuesto Nacional",
+      "keys": ["impuesto nacional", "imp-nac"],
       "is_precargado": true
     },
-    "IB Mensual (Reg. Simp)": {
+    "Impuesto Provincial": {
       "concepto": "Monot+Impuestos",
-      "detalle": "IB Mensual (Reg. Simp)",
-      "keys": ["iibb", "ib", "A.P.I. Provincia de Santa Fe", "IIBB Santa Fe", "20332179749"],
+      "detalle": "Impuesto Provincial",
+      "keys": ["impuesto provincial", "imp-prov", "99000000001"],
       "is_precargado": true
     },
     "Gas": {
       "concepto": "Gas",
       "detalle": null,
-      "keys": ["gas", "litoral gas", "99605684994"],
+      "keys": ["gas", "empresa de gas ejemplo", "99000000002"],
       "is_precargado": true
     },
     "Agua": {
       "concepto": "Agua",
       "detalle": null,
-      "keys": ["agua", "aguas santafesinas", "12900371920006"],
+      "keys": ["agua", "empresa de agua ejemplo", "99000000003"],
       "is_precargado": true
     },
     "Luz": {
       "concepto": "Luz",
       "detalle": null,
-      "keys": ["luz", "epe", "epe - santa fe", "285105179612"],
+      "keys": ["luz", "empresa electrica ejemplo", "99000000004"],
       "is_precargado": true
     },
     "Internet/Celular": {
       "concepto": "Internet/Celular",
       "detalle": null,
-      "keys": ["internet", "celular", "claro", "cu1689383659"],
+      "keys": ["internet", "celular", "proveedor telecom ejemplo"],
       "is_precargado": true
     },
     "Alquiler": {
@@ -43,52 +43,16 @@
       "keys": ["alquiler"],
       "is_precargado": true
     },
-    "Terapia": {
-      "concepto": "Terapia",
-      "detalle": null,
-      "keys": ["terapia", "psicologa", "romina andrea giosa", "27-23186440-1"],
+    "Profesional 1": {
+      "concepto": "Hogar/Autocuidado",
+      "detalle": "Profesional 1",
+      "keys": ["profesional1", "nombre apellido ejemplo", "20000000001", "0000001100000000000001"],
       "is_precargado": true
     },
     "Obra Social": {
       "concepto": "Varios",
       "detalle": "Obra Social",
-      "keys": ["sancor", "asoc.mut.sancor"],
-      "is_precargado": true
-    },
-    "Telefono Meli": {
-      "concepto": "Varios",
-      "detalle": "Telefono Meli",
-      "keys": ["telefono meli", "cta meli"],
-      "is_precargado": true
-    },
-    "Meditacion": {
-      "concepto": "Varios",
-      "detalle": "Meditacion",
-      "keys": ["meditacion", "lucas gamarra", "lucas miguel angel gamarra", "0000003100036021533957"],
-      "is_precargado": true
-    },
-    "Taichi": {
-      "concepto": "Varios",
-      "detalle": "Taichi",
-      "keys": ["taichi","chi kung", "damian frontera", "damian raul frontera", "20295609053", "0000003100066672099007"],
-      "is_precargado": true
-    },
-    "Mariano Djembe": {
-      "concepto": "Varios",
-      "detalle": "Mariano Djembe",
-      "keys": ["djembe", "mariano djembe", "mariano"],
-      "is_precargado": true
-    },
-    "Gimnasio": {
-      "concepto": "Varios",
-      "detalle": "Gimnasio",
-      "keys": ["gimnasio"],
-      "is_precargado": true
-    },
-    "Psiquiatra": {
-      "concepto": "Hogar/Autocuidado",
-      "detalle": "Psiquiatra",
-      "keys": ["psiquiatra", "psi", "monica olea", "monica guadalupe olea", "27286586215", "0000003100054494534543"],
+      "keys": ["obra social ejemplo", "mutual ejemplo"],
       "is_precargado": true
     },
     "Tarjeta MP": {
@@ -100,7 +64,19 @@
     "Tarjeta NX": {
       "concepto": "Varios",
       "detalle": "Tarjeta Nx",
-      "keys": ["tarjeta nx", "tarjeta naranja", "t nar", "pago digital-naranja x"],
+      "keys": ["tarjeta nx", "tarjeta naranja x", "pago digital-naranja x"],
+      "is_precargado": true
+    },
+    "Servicio Fijo 1": {
+      "concepto": "Varios",
+      "detalle": "Servicio Fijo 1",
+      "keys": ["servicio fijo 1", "proveedor fijo 1", "20000000002", "0000001100000000000002"],
+      "is_precargado": true
+    },
+    "Servicio Fijo 2": {
+      "concepto": "Varios",
+      "detalle": "Servicio Fijo 2",
+      "keys": ["servicio fijo 2", "proveedor fijo 2", "20000000003", "0000001100000000000003"],
       "is_precargado": true
     }
   },
@@ -108,25 +84,25 @@
     "Dietetica": {
       "concepto": "Dietetica",
       "detalle": null,
-      "keys": ["dietetica", "maria emilia carballada", "0000003100051126196021", "196921"],
+      "keys": ["dietetica", "nombre proveedor dietética", "0000001100000000000004"],
       "is_precargado": false
     },
     "Super": {
       "concepto": "Super",
       "detalle": "Supermercado",
-      "keys": ["supermercado","super", "kilbel", "el túnel", "30519004557"],
+      "keys": ["supermercado", "super", "nombre supermercado ejemplo", "30000000001"],
       "is_precargado": false
     },
     "Panaderia": {
       "concepto": "Super",
       "detalle": "Panaderia",
-      "keys": ["panaderia", "pin pan", "balear", "panad"],
+      "keys": ["panaderia", "nombre panaderia ejemplo"],
       "is_precargado": false
     },
     "Verduleria": {
       "concepto": "Super",
       "detalle": "Verduleria",
-      "keys": ["verdu", "verduleria", "cynthia marisol pilinco romero", "0000003100091433357913", "23399520894"],
+      "keys": ["verdu", "verduleria", "nombre verduleria ejemplo", "0000001100000000000005"],
       "is_precargado": false
     },
     "Comida/Bebida": {
@@ -150,17 +126,19 @@
     "Farmacia": {
       "concepto": "Hogar/Autocuidado",
       "detalle": "Farmacia",
-      "keys": ["Farmacia", "medicamento", "27-22215337-4", "COM: 16521276" ], "is_precargado": false },
+      "keys": ["farmacia", "medicamento", "20000000004"],
+      "is_precargado": false
+    },
     "Hogar/Autocuidado": {
       "concepto": "Hogar/Autocuidado",
       "detalle": null,
-      "keys": ["hogar", "autocuidado" ],
+      "keys": ["hogar", "autocuidado"],
       "is_precargado": false
     },
-    "LlinasyLLinas": {
+    "Comercio Variable 1": {
       "concepto": "Varios",
-      "detalle": "llinas y llinas",
-      "keys": ["linas y linas", "saumerios", "llinas y llinas", "20168802987"],
+      "detalle": "Comercio Variable 1",
+      "keys": ["comercio variable 1", "nombre comercio ejemplo", "20000000005"],
       "is_precargado": false
     }
   }

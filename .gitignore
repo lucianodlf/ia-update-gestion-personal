@@ -11,6 +11,14 @@ logs/*
 
 # Agent2 — MCP config con ruta a credenciales (generado por make init)
 scripts/agent2-mcp.json
+# Clasificación de gastos — contiene datos personales reales (nombres, CUIT, CBU)
+# Usar scripts/classification.json.example como template público
+scripts/classification.json
+
+# Workflows exportados desde n8n — contienen paths del sistema local
+# Usar workflows/n8n/example.template.* como versión pública
+workflows/n8n/fase-3b-v2-telegram-ocr-agente2.json
+workflows/n8n/error-handler-telegram.json
 # Versiones anteriores del system prompt (solo se conserva la última)
 scripts/agent2-system-prompt-v*.txt
 !scripts/agent2-system-prompt-latest.txt

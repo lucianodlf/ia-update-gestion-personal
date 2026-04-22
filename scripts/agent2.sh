@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # ── PATH — necesario cuando se invoca desde SSH no-interactivo ────────────────
-export PATH="$PATH:/home/rafiki/.local/bin:/usr/local/bin:/home/rafiki/.nvm/versions/node/v22.13.0/bin"
+export PATH="$PATH:$HOME/.local/bin:/usr/local/bin:$(ls -d $HOME/.nvm/versions/node/*/bin 2>/dev/null | tail -1)"
 
 # ── Capturar args originales antes de cualquier shift ─────────────────────────
 ORIGINAL_CALL="$0 $*"

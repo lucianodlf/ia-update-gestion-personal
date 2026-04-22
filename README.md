@@ -139,7 +139,49 @@ Este comando lee el JSON descargado, extrae `project_id` y la ruta absoluta a la
 
 > La sección de setup de credenciales se ampliará con capturas de pantalla.
 
-### 4. Iniciar el entorno
+### 4. Configurar túnel zrok2 (para webhooks de Telegram)
+
+n8n necesita una URL pública accesible desde internet para recibir webhooks de Telegram. En desarrollo local se usa zrok2.
+
+**Instalar zrok2** (si no está instalado): [zrok.io](https://zrok.io)
+
+**Crear un nombre fijo para el share:**
+
+```bash
+# Autenticarse con el token de zrok (ZROK_TOKEN del .env)
+zrok2 enable <tu-zrok-token>
+
+# Crear un nombre reservado (reemplazar "mi-n8n-local" con el nombre que prefieras)
+zrok2 create name -n public mi-n8n-local
+```
+
+El nombre creado determina la URL pública: `https://mi-n8n-local.<zona>.zrok.io`
+
+**Configurar en `.env`** (raíz del proyecto):
+
+```
+ZROK_NAME=mi-n8n-local
+N8N_PORT=5678
+```
+
+También completar `WEBHOOK_URL` en `services/n8n/.env` con la URL pública resultante:
+
+```
+WEBHOOK_URL=https://mi-n8n-local.<zona>.zrok.io/
+```
+
+**Comandos útiles de zrok2:**
+
+```bash
+zrok2 list names          # Ver nombres reservados y su URL
+zrok2 list shares         # Ver shares activos
+zrok2 status              # Estado general
+zrok2 delete name <nombre>  # Eliminar un nombre reservado
+```
+
+> **Nota:** zrok2 es un túnel pensado para desarrollo. Para producción, considerar [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) como alternativa permanente.
+
+### 5. Iniciar el entorno
 
 ```bash
 # Entorno 100% operativo
