@@ -20,6 +20,9 @@ También es un espacio de aprendizaje y exploración de las tecnologías involuc
 
 ![Workflow n8n](assets/Screenshot-workflow-n8n.png)
 
+## Demo
+![Video Demo](assets/demo_1_final_github.mp4)
+
 ---
 
 ## Arquitectura
