@@ -24,6 +24,9 @@ También es un espacio de aprendizaje y exploración de las tecnologías involuc
 
 ![Video-Demo](https://github.com/user-attachments/assets/e7915549-1a0e-4407-93b1-804beab1454a)
 
+
+<video src="https://github.com/user-attachments/assets/e7915549-1a0e-4407-93b1-804beab1454a" controls width="100%"></video>
+
 ---
 
 ## Arquitectura
